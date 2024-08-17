@@ -135,8 +135,8 @@ AUTH_USER_MODEL ='custom_auth.User'
 
 # To make static path for images
 
-MEDIA_URL= 'media/'
-MEDIA_ROOT= BASE_DIR / 'media'
+MEDIA_URL='media/'
+MEDIA_ROOT=BASE_DIR / 'media'
 
 
 # email Setups
@@ -148,3 +148,6 @@ EMAIL_USE_SSL = False
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST") #your email
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASSWORD") # your credential
+
+LOGOUT_REDIRECT_URL = 'login/'  #redirect to login page
+login_url = 'user/login/'

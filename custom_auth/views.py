@@ -7,16 +7,21 @@ from django.utils.dateparse import parse_date
 from datetime import date
 from django.core.mail import send_mail
 import os
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login,logout
+from features.models import Education, Work
+from django.http import HttpResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
-class SignupPageView(TemplateView):
-    template_name = "signup.html"
 
-class demo(TemplateView):
-    template_name ="demo.html"
 
-class UserView(View):
+class demo(LoginRequiredMixin,TemplateView):
+    login_url = 'login/'
+    template_name ="home.html"
+
+class SignupView(View):
+    def get(self, request):
+        return render(request, "signup.html")
     def post(self,request):
         data = request.POST
         usertable = User()
@@ -130,3 +135,20 @@ class LoginView(View):
         else:
             messages.error(request, "Invalid username or password")
             return redirect("login")
+
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect("login")
+    
+class ProfileView(LoginRequiredMixin,View):
+    login_url = 'login/'
+    def get(self,request):
+        edu = Education.objects.filter(user = request.user)
+        emp = Work.objects.filter(user= request.user)
+        print(edu)
+        if edu.exists():
+            return HttpResponse(render(request,"profile.html",{'edu':edu,'emp':emp}))
+
+        return render(request,"profile.html")
+

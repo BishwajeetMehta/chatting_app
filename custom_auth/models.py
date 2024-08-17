@@ -14,3 +14,6 @@ class User(AbstractUser):
     profile =models.ImageField(blank=True, null=True,upload_to='profile_pictures/')
     cover_pic = models.ImageField(blank=True,null=True,upload_to='cover_pictures/')
     status = models.BooleanField(default=1)
+
+    def __str__(self) -> str:
+        return self.username

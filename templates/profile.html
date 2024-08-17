@@ -1,0 +1,152 @@
+
+{% extends 'master.html' %}
+{% load static %}
+{% block title %}Profile{% endblock title %}
+
+
+{% block container %}
+    {% if user.is_authenticated %}
+
+    </br></br>
+    <!-- Profile Header -->
+    <div class="pprofile-header">
+        <!-- Cover Photo -->
+        <div class="ccover-photo"> 
+            {% if not user.cover_pic %}
+            <img id="coverimg" src="https://via.placeholder.com/600x400" alt="Cover Photo">
+            {% else %}
+            <img id="coverimg" src="{{user.cover_pic.url}}" alt="Cover Photo">
+            {% endif %}
+        </div>
+        <!-- Profile Picture -->
+            
+        <div class="pprofile-picture">
+            {% if not user.profile %}
+            <img id="profileimg" src="https://th.bing.com/th/id/OIP.0CZd1ESLnyWIHdO38nyJDAHaGF?w=208&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7" alt="profile Photo">
+            {% else %}
+            <img id="profileimg" src="{{user.profile.url}}" alt="profile Photo">
+            {% endif %}
+            
+        </div>
+    </div>
+
+    <!-- Profile Navigation Tabs -->
+    <div class="pprofile-nav">
+       
+        <a href="#about"><i class="fa-solid fa-info-circle"></i> About</a>
+        <a href="#friends"><i class="fa-solid fa-user-friends"></i> Friends</a>
+        {% comment %} <a href="#photos"><i class="fa-solid fa-images"></i> Photos</a> {% endcomment %}
+        <a href="{% url 'logout' %}"> <i class="fas fa-right-from-bracket"></i></i>Logout</a>
+    </div>
+
+    <!-- Profile Content -->
+    <div class="pprofile-content">
+        <!-- Left Column: About, Friends, etc. -->
+        <div class="left-column">
+            <!-- Intro Section -->
+            <div class="section">
+                <h2> {{user.first_name}} {{user.last_name}} ({{user.username}})</h3>
+                    {% if user.bio %}
+                    <h5 style="font-style: italic;">{{user.bio}}</h5>
+                    {% else %}
+                    {% endif %}
+                <h3>Intro</h3>
+                {% for work in emp %}
+                <div class="profile-info">
+                    <i class="fa-solid fa-briefcase"></i>
+                    
+                    <p>Works at <b>{{work.office_name}}<b> as <b>{{work.position}}</b> </p>
+                </div>
+                {% endfor %}
+
+                {% for education in edu %}
+                <div class="profile-info">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <p>Wents to <b>{{education.institution}}</b> </p>
+                </div>
+                {% endfor %}
+
+                {% if user.temporary_location%}
+                <div class="profile-info">
+                    <i class="fa-solid fa-home"></i>
+                    <p>Lives in <b>{{user.temporary_location}}</b></p>
+                </div>
+                {% else %}
+                {% endif %}
+                {% if user.permanent_location %}
+                <div class="profile-info">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <p>From in <b>{{user.permanent_location}}</b></p>
+                </div>
+                {% else %}
+                {% endif %}
+                <div class="profile-info">
+                    <i class="fa-solid fa-heart"></i>
+                    <p>Single</p>
+                </div>
+            </div>
+    
+            <!-- Photos Section -->
+            {% comment %} <div class="section">
+                <h3>Photos</h3>
+                <div class="photos">
+                    <img src="https://via.placeholder.com/100" alt="Photo 1">
+                    <img src="https://via.placeholder.com/100" alt="Photo 2">
+                    <img src="https://via.placeholder.com/100" alt="Photo 3">
+                </div>
+                <a href="#" class="see-more">See all Photos</a>
+            </div> {% endcomment %}
+    
+            <!-- Friends Section -->
+            <div class="section">
+                <h3>Friends</h3>
+                <div class="friends-list">
+                    <div class="friend">
+                        <img src="https://via.placeholder.com/50" alt="Friend 1">
+                        <p class="friend-name">Jane Doe</p>
+                    </div>
+                    <div class="friend">
+                        <img src="https://via.placeholder.com/50" alt="Friend 2">
+                        <p class="friend-name">John Smith</p>
+                    </div>
+                    <div class="friend">
+                        <img src="https://via.placeholder.com/50" alt="Friend 3">
+                        <p class="friend-name">Alice Brown</p>
+                    </div>
+                </div>
+                <a href="#" class="see-more">See all Friends</a>
+            </div>
+        </div>
+    
+
+        <!-- Right Column: Timeline/Posts -->
+        <div class="rright-column">
+            <!-- Post 1 -->
+            <div class="ppost">
+                <div class="card-header">
+                    {% if not user.profile %}
+                    <img src="https://th.bing.com/th/id/OIP.0CZd1ESLnyWIHdO38nyJDAHaGF?w=208&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7" alt="Profile Picture" class="profile-pic">
+                    {% else %}
+                    <img src="{{user.profile.url}}" alt="Profile Picture" class="profile-pic">
+                    {% endif %}
+                    <div class="user-info">
+                        <h3> {{user.username}}</h3>
+                        <p>2 hrs ago</p>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <p>This is a sample post. Here is some content for the feed card.</p>
+                    <img src="https://via.placeholder.com/600x400" alt="Post Image" class="post-image">
+                </div>
+                <div class="card-actions">
+                    <button><i class="fa-solid fa-thumbs-up"></i> Like</button>
+                    <button><i class="fa-solid fa-comment"></i> Comment</button>
+                    <button><i class="fa-solid fa-share"></i> Share</button>
+                </div>
+            </div>
+            
+            <!-- Additional posts go here -->
+        </div>
+    </div>
+    {% endif %}
+{% endblock container %}
