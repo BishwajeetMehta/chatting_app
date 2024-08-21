@@ -1,0 +1,65 @@
+{% extends 'master.html' %}
+
+{% block title %} Friends {% endblock title %}
+
+{% block container %}
+    <div class="container">
+        
+        <div class="main-content">
+
+            <div id="feeds" class="post">
+                <h2>Add Friend <i class="fa-solid fa-user-plus"></i></h2>
+                {% for new_user in new_users%}
+             
+                <div class="fcard">
+                    <!-- Profile Picture -->
+                    {% if new_user.profile %}
+                    <img src="{{new_user.profile.url}}" alt="Profile Picture">
+                    {% else %}
+                    <img src="https://via.placeholder.com/80" alt="Profile Picture">
+                    {% endif %}
+                    <!-- Name -->
+                    <h3>{{new_user.username}}</h3>
+                  
+                    <!-- Friend Request Button -->
+                   <form action="{% url 'friend_request' new_user.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit"><i class="fa-solid fa-user-plus"></i> Send Friend Request</button>
+                    </form> 
+    
+                </div>
+                {% endfor %}
+                {% for user in users %}
+                    {% for fr in pending_request %}
+                        {% if fr.to_user.id == user.id %}
+                        <div class="fcard">
+                            <!-- Profile Picture -->
+                            {% if new_user.profile %}
+                            <img src="{{new_user.profile.url}}" alt="Profile Picture">
+                            {% else %}
+                            <img src="https://via.placeholder.com/80" alt="Profile Picture">
+                            {% endif %}
+                            <!-- Name -->
+                            <h3>{{user.username}}</h3>
+                            {% if fr.status == "pending"  %}
+                            <form method="post" action="#">
+                                {% csrf_token %}
+                                <button type="submit">Cancel Request</button>
+                                </form>
+                                {% else %}
+                           
+                            <!-- Friend Request Button -->
+                            <form action="{% url 'friend_request' user.id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit"><i class="fa-solid fa-user-plus"></i> Send Friend Request</button>
+                            </form> 
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                      
+                    {% endfor %}
+                {% endfor %}
+
+        </div>
+    </div>
+{% endblock container %}
