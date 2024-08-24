@@ -19,7 +19,7 @@
                     <img src="https://via.placeholder.com/80" alt="Profile Picture">
                     {% endif %}
                     <!-- Name -->
-                    <h3>{{new_user.username}}</h3>
+                    <h3>{{new_user.first_name}} {{new_user.last_name}}</h3>
                   
                     <!-- Friend Request Button -->
                    <form action="{% url 'friend_request' new_user.id %}" method="POST">
@@ -34,18 +34,18 @@
                         {% if fr.to_user.id == user.id %}
                         <div class="fcard">
                             <!-- Profile Picture -->
-                            {% if new_user.profile %}
-                            <img src="{{new_user.profile.url}}" alt="Profile Picture">
+                            {% if user.profile %}
+                            <img src="{{user.profile.url}}" alt="Profile Picture">
                             {% else %}
                             <img src="https://via.placeholder.com/80" alt="Profile Picture">
                             {% endif %}
                             <!-- Name -->
-                            <h3>{{user.username}}</h3>
+                            <h3>{{user.first_name}} {{user.last_name}}</h3>
                             {% if fr.status == "pending"  %}
-                            <form method="post" action="#">
+                            <form method="POST" action="{% url 'friend_request' fr.id %}">
                                 {% csrf_token %}
-                                <button type="submit">Cancel Request</button>
-                                </form>
+                                <button type="submit"  name="action" value="delete" id="cancel_button" style="background-color: red;"> <i class="fa-solid fa-xmark"></i> Cancel Request</button>
+                             </form>
                                 {% else %}
                            
                             <!-- Friend Request Button -->

@@ -1,0 +1,43 @@
+{% extends 'master.html' %}
+{% block title %}Accept friend requests{% endblock title %}
+{% block container %}
+
+
+<div class="container">
+        
+    <div class="main-content">
+
+        <div id="feeds" class="post">
+            {% for user in pendings  %}
+            <div class="fcard">
+                <!-- Profile Picture -->
+               {% if user.from_user.profile %}
+               
+                <img src="{{user.from_user.profile.url}}" alt="Profile Picture">
+                {% else %}
+                <img src="https://via.placeholder.com/80" alt="Profile Picture">
+                {% endif %}
+                <!-- Name -->
+                <h3>{{user.from_user.first_name}} {{user.from_user.last_name}}</h3>
+              
+                <!-- Friend Request Button -->
+             
+                <form action="{% url 'accept_requests' user.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit"  name="action" value="accept"><i class="fa-solid fa-user"></i> Accept</button>
+
+                    <button type="submit"  name="action" value="delete" style="background-color: red;">
+                        <i class="fa-solid fa-xmark"></i> Cancel
+                    </button>
+                </form>
+               
+
+                
+
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+</div> 
+{% endblock container %}

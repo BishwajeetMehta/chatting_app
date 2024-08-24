@@ -32,11 +32,17 @@ class FriendView(View):
         new_users= users_to_display.exclude(id__in=pending_requests_ids)
         print(f'new user{new_users}')
 
-        return render(request, 'friends.html', { 'users': users_to_display,'pending_request': friend_requests_sent,'new_users':new_users})
+        return render(request, 'send_friends.html', { 'users': users_to_display,'pending_request': friend_requests_sent,'new_users':new_users})
 
 
     def post(self,request,id):
-        data = request.POST
+        action = request.POST.get('action')
+        if action == 'delete':
+            request_to_delete = FriendRequest.objects.get(id=id)
+            request_to_delete.delete()
+            print("deleted sucessfully")
+            return redirect("friend")
+        
         receiver = User.objects.get(id = id)
         print(receiver.id)
         ftable = FriendRequest()
@@ -44,5 +50,37 @@ class FriendView(View):
         ftable.to_user = receiver
         ftable.save()
         messages.error(request,"Sent sucessfully ")
+        print("request send sucessfully")
         return redirect("friend")
+    
+    
+
+class Accept_requestView(View):
+    def get(self,request):
+        current_user = request.user
+        pendings= FriendRequest.objects.filter(to_user=current_user,status='pending').all()
+        print(pendings)
+        return render(request,'accept_friends.html',{'pendings':pendings})
+    
+    def post(self,request,id):
+        action = request.POST.get('action')
+        pending_requests = FriendRequest.objects.get(id=id)
+        print(pending_requests)
+
+        if action == 'accept':
+            if pending_requests.to_user == request.user:
+                pending_requests.status = 'accepted'
+                pending_requests.save()
+                return redirect('pending_requests')
+        elif action == 'delete':
+            pending_requests.delete()
+            print('deleted sucessfully')
+            return redirect('pending_requests')
+        
+        print('something went wrong')
+        return redirect('pending_requests')
+        
+
+
+
 
