@@ -80,7 +80,28 @@ class Accept_requestView(View):
         print('something went wrong')
         return redirect('pending_requests')
         
+class MessangerView(View):
+    def get(self,request):
+        user = request.user 
+        friends = User.objects.filter(
+        Q(sent_requests__to_user=user, sent_requests__status="accepted") |
+        Q(received_requests__from_user=user, received_requests__status="accepted")
+    ).distinct()
+        
+#         for f in friends:
+#             if f.to_user == request.user:
+#                 frie = f.from_user
+#                 print('fi')
+#             if f.from_user == request.user:
+#                 frie = f.to_user
+#                 print("sec")
 
+            
+
+
+
+        print(friends)
+        return render(request,'messanger.html',{'friends':friends})
 
 
 

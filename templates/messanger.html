@@ -1,0 +1,101 @@
+{% extends 'master.html' %}
+{% block title %}Inbox{% endblock title %}
+{% block container %}
+<br><br><br>
+
+<div class="messenger-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Messenger</h2>
+        <ul class="chat-list">
+            {% for friend in friends %}
+            <li onclick="openChat('{{ forloop.counter }}')">
+               {% if friend.profile %}
+               <img src="{{friend.profile.url}}" alt="Profile Picture">
+               {% else %}
+                <img src="https://via.placeholder.com/40" alt="Profile Picture">
+                {% endif %}
+                <span class="chat-name">{{friend.first_name}} {{friend.last_name}}</span>
+            </li>
+            {% endfor %}
+
+            {% comment %} <li onclick="openChat('chat2')">
+                <img src="https://via.placeholder.com/40" alt="Profile Picture">
+                <span class="chat-name">Jane Smith</span>
+            </li> {% endcomment %}
+            <!-- Add more chat items here -->
+        </ul>
+    </div>
+
+    <!-- Chat Window for John Doe -->
+     {% for chat in friends %}
+    <div id="{{ forloop.counter }}" class="chat-window">
+        <div class="chat-header">
+        
+            <h3>{{chat.first_name}} {{chat.last_name}}</h3>
+            <div class="chat-actions">
+                <i class="fa-solid fa-video"></i>
+                <i class="fa-solid fa-phone"></i>
+                <i class="fa-solid fa-ellipsis-h"></i>
+            </div>
+        </div>
+        <div class="chat-body">
+            <div class="message sent">
+                Hello, how are you? {{chat.first_name}}
+            </div>
+            <div class="message received">
+                I'm good, thanks! How about you?
+            </div>
+            <!-- Add more messages here -->
+        </div>
+        <div class="chat-input">
+            <input type="text" placeholder="Type a message...">
+            <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+    {% endfor %}
+
+    <!-- Chat Window for Jane Smith -->
+    {% comment %} <div id="chat2" class="chat-window">
+        <div class="chat-header">
+            <h3>Jane Smith</h3>
+            <div class="chat-actions">
+                <i class="fa-solid fa-video"></i>
+                <i class="fa-solid fa-phone"></i>
+                <i class="fa-solid fa-ellipsis-h"></i>
+            </div>
+        </div>
+        <div class="chat-body">
+            <div class="message sent">
+                Hi Jane, what's up?
+            </div>
+            <div class="message received">
+                Not much, just working on some projects. You?
+            </div>
+            <!-- Add more messages here -->
+        </div>
+        <div class="chat-input">
+            <input type="text" placeholder="Type a message...">
+            <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div> {% endcomment %}
+</div>
+
+<script>
+    function openChat(chatId) {
+        // Hide all chat windows
+        const chatWindows = document.querySelectorAll('.chat-window');
+        chatWindows.forEach(window => {
+            window.style.display = 'none';
+        });
+
+        // Show the selected chat window
+        const selectedChat = document.getElementById(chatId);
+        selectedChat.style.display = 'flex';
+    }
+</script>
+
+
+
+
+{% endblock container %}
